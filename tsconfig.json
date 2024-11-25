@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",                       // Specifies ECMAScript target version
+    "module": "esnext",                       // Uses ESNext modules for modern environments
+    "lib": ["dom", "dom.iterable", "esnext"], // Includes DOM and latest JavaScript features
+    "allowJs": true,                          // Allows JavaScript files in the project
+    "skipLibCheck": true,                     // Skips type checking for library files for faster builds
+    "strict": true,                           // Enables all strict type-checking options
+    "noEmit": true,                           // Prevents TypeScript from emitting compiled files
+    "esModuleInterop": true,                  // Ensures compatibility with CommonJS modules
+    "moduleResolution": "bundler",            // Resolves modules compatible with Next.js
+    "resolveJsonModule": true,                // Allows importing JSON files as modules
+    "isolatedModules": true,                  // Treats each file as an isolated module (required for Next.js)
+    "jsx": "preserve",                        // Keeps JSX as-is for Next.js to handle
+    "incremental": true,                      // Enables incremental builds for faster rebuilds
+    "forceConsistentCasingInFileNames": true, // Enforces case-sensitive imports
+    "baseUrl": ".",                           // Sets base path for imports
+    "paths": {                                // Custom path aliases
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@utils/*": ["./src/utils/*"]
+    },
+    "plugins": [
+      { "name": "next" }                      // Adds Next.js-specific TypeScript support
+    ]
+  },
+  "include": [
+    "next-env.d.ts",                          // Next.js environment types
+    "**/*.ts",                                // All TypeScript files
+    "**/*.tsx",                               // All TSX (React) files
+    ".next/types/**/*.ts"                     // Next.js generated types
+  ],
+  "exclude": ["node_modules", "dist"]         // Excludes unnecessary directories
+}
+
+
