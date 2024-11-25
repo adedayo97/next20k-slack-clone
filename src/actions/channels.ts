@@ -29,95 +29,67 @@ export const createChannel = async ({
     .select('*');
 
   if (error) {
-    return { error: 'Insert Error' };
+    return { error: error.message || 'Insert Error' }; // Provide actual error message
   }
 
-  //   Update channel members array
-  const [, updateChannelMembersError] = await updateChannelMembers(
-    channelRecord[0].id,
-    userId
-  );
+  try {
+    // Run all updates concurrently
+    const [updateChannelMembersData, updateChannelMembersError] = await updateChannelMembers(channelRecord[0].id, userId);
+    if (updateChannelMembersError) throw new Error(updateChannelMembersError.message || 'Update members channel error');
 
-  if (updateChannelMembersError) {
-    return { error: 'Update members channel error' };
-  }
+    const [addChannelToUserData, addChannelToUserError] = await addChannelToUser(userData.id, channelRecord[0].id);
+    if (addChannelToUserError) throw new Error(addChannelToUserError.message || 'Add channel to user error');
 
-  //   Add channel to user's channels array
-  const [, addChannelToUserError] = await addChannelToUser(
-    userData.id,
-    channelRecord[0].id
-  );
+    const [updateWorkspaceChannelData, updateWorkspaceChannelError] = await updateWorkspaceChannel(channelRecord[0].id, workspaceId);
+    if (updateWorkspaceChannelError) throw new Error(updateWorkspaceChannelError.message || 'Update workspace channel error');
 
-  if (addChannelToUserError) {
-    return { error: 'Add channel to user error' };
-  }
+    return { data: channelRecord[0] }; // Return the created channel data on success
 
-  //   Add channel to workspace's channels array
-  const [, updateWorkspaceChannelError] = await updateWorkspaceChannel(
-    channelRecord[0].id,
-    workspaceId
-  );
-
-  if (updateWorkspaceChannelError) {
-    return { error: 'Update workspace channel error' };
+  } catch (error) {
+    return { error: error.message || 'An unknown error occurred' };
   }
 };
 
 export const addChannelToUser = async (userId: string, channelId: string) => {
   const supabase = await supabaseServerClient();
 
-  const { data: addChannelData, error: addChannelError } = await supabase.rpc(
-    'update_user_channels',
-    {
-      user_id: userId,
-      channel_id: channelId,
-    }
-  );
+  const { data: addChannelData, error: addChannelError } = await supabase.rpc('update_user_channels', {
+    user_id: userId,
+    channel_id: channelId,
+  });
 
   return [addChannelData, addChannelError];
 };
 
-export const updateChannelMembers = async (
-  channelId: string,
-  userId: string
-) => {
+export const updateChannelMembers = async (channelId: string, userId: string) => {
   const supabase = await supabaseServerClient();
 
-  const { data: updateChannelData, error: updateChannelError } =
-    await supabase.rpc('update_channel_members', {
-      new_member: userId,
-      channel_id: channelId,
-    });
+  const { data: updateChannelData, error: updateChannelError } = await supabase.rpc('update_channel_members', {
+    new_member: userId,
+    channel_id: channelId,
+  });
 
   return [updateChannelData, updateChannelError];
 };
 
-const updateWorkspaceChannel = async (
-  channelId: string,
-  workspaceId: string
-) => {
+const updateWorkspaceChannel = async (channelId: string, workspaceId: string) => {
   const supabase = await supabaseServerClient();
 
-  const { data: updateWorkspaceData, error: updateWorkspaceError } =
-    await supabase.rpc('add_channel_to_workspace', {
-      channel_id: channelId,
-      workspace_id: workspaceId,
-    });
+  const { data: updateWorkspaceData, error: updateWorkspaceError } = await supabase.rpc('add_channel_to_workspace', {
+    channel_id: channelId,
+    workspace_id: workspaceId,
+  });
 
   return [updateWorkspaceData, updateWorkspaceError];
 };
 
-export const updateChannelRegulators = async (
-  userId: string,
-  channelId: string
-) => {
+export const updateChannelRegulators = async (userId: string, channelId: string) => {
   const supabase = await supabaseServerClient();
 
-  const { data: updateChannelData, error: updateChannelError } =
-    await supabase.rpc('update_channel_regulators', {
-      new_regulator: userId,
-      channel_id: channelId,
-    });
+  const { data: updateChannelData, error: updateChannelError } = await supabase.rpc('update_channel_regulators', {
+    new_regulator: userId,
+    channel_id: channelId,
+  });
 
   return [updateChannelData, updateChannelError];
 };
