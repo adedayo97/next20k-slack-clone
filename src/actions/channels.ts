@@ -34,7 +34,7 @@ export const createChannel = async ({
 
   //   Update channel members array
   const [, updateChannelMembersError] = await updateChannelMembers(
-    channelRecord[0].id,
+    channelRecord[0],
     userId
   );
 
@@ -45,7 +45,7 @@ export const createChannel = async ({
   //   Add channel to user's channels array
   const [, addChannelToUserError] = await addChannelToUser(
     userData.id,
-    channelRecord[0].id
+    channelRecord[0]
   );
 
   if (addChannelToUserError) {
@@ -54,7 +54,7 @@ export const createChannel = async ({
 
   //   Add channel to workspace's channels array
   const [, updateWorkspaceChannelError] = await updateWorkspaceChannel(
-    channelRecord[0].id,
+    channelRecord[0],
     workspaceId
   );
 

@@ -52,7 +52,7 @@ export type Messages = {
 
 export type MessageWithUser = Messages & { user: User };
 
-export type SocketIoApiResponse = NextApiResponse & {
+export type SockerIoApiResponse = NextApiResponse & {
     socket: Socket & {
         server: NetServer & {
             io: SocketIOServer;

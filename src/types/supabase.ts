@@ -51,6 +51,64 @@ export type Database = {
           },
         ]
       }
+      direct_messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          file_url: string | null
+          id: number
+          is_deleted: boolean
+          updated_at: string
+          user: string
+          user_one: string
+          user_two: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: number
+          is_deleted?: boolean
+          updated_at?: string
+          user: string
+          user_one: string
+          user_two: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: number
+          is_deleted?: boolean
+          updated_at?: string
+          user?: string
+          user_one?: string
+          user_two?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "direct_message_user_one_fkey"
+            columns: ["user_one"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "direct_message_user_two_fkey"
+            columns: ["user_two"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "direct_messages_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           channel_id: string
@@ -146,7 +204,15 @@ export type Database = {
           type?: string | null
           workspaces?: string[] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workspaces: {
         Row: {
@@ -224,6 +290,13 @@ export type Database = {
       update_channel_members: {
         Args: {
           new_member: string
+          channel_id: string
+        }
+        Returns: undefined
+      }
+      update_channel_regulators: {
+        Args: {
+          new_regulator: string
           channel_id: string
         }
         Returns: undefined
@@ -325,19 +398,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
-  }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
