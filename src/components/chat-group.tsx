@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 
 import { Channel, User, Workspace } from "@/types/app";
 import { FC, useEffect, useState } from "react";

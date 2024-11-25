@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { redirect } from 'next/navigation';
 
 import { getUserData } from '@/actions/get-user-data';

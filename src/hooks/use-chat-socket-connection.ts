@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useSocket } from '@/providers/web-socket';

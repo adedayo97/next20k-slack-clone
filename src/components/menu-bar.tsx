@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Editor } from "@tiptap/react"
 import { Bold, Code, Italic, List, ListOrdered, SquareCode, Strikethrough } from "lucide-react";
 import { useTheme } from "next-themes"

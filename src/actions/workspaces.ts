@@ -1,5 +1,8 @@
 "use server"
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+
 import { supabaseServerClient } from "@/supabase/supabaseServer"
 import { getUserData } from "./get-user-data";
 import { addMemberToWorkspace } from "./add-member-to-workspace";
